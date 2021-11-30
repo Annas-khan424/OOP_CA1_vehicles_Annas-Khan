@@ -15,15 +15,6 @@ public class PassengerStore {
         loadPassengerDataFromFile(fileName);
     }
 
-    public List<Passenger> getAllPassengers() {
-        return this.passengerList;
-    }
-
-    public void displayAllPassengers() {
-        for (Passenger p : this.passengerList) {
-            System.out.println(p.toString());
-        }
-    }
 
     /**
      * Read Passenger records from a text file and create and add Passenger
@@ -54,6 +45,37 @@ public class PassengerStore {
             System.out.println("Exception thrown. " + e);
         }
     }
+    public List<Passenger> getAllPassengers() {
+        return this.passengerList;
+    }
+
+    public void displayAllPassengers() {
+        for (Passenger p : this.passengerList) {
+            System.out.println(p.toString());
+        }
+    }
+
+    public String addPassenger(String name, String email, String phone,
+                               double latitude, double longitude) {
+        for (Passenger p : this.passengerList) {
+            if (p.getName().toLowerCase().equals(name.toLowerCase()) &&
+                    p.getEmail().toLowerCase().equals(email.toLowerCase()))
+                return "\nPassenger " + name + " with email " + " is already stored";
+        }
+        Passenger newPassenger = new Passenger(name, email, phone, latitude, longitude);
+        this.passengerList.add(newPassenger);
+        return "\nPassenger \"" + name + "\" with email \"" + email + "\" has been added";
+    }
+
+    public Passenger findPassengerByName(String query) {
+        for (Passenger p : this.passengerList) {
+            if (p.getName().toLowerCase().equals(query.trim().toLowerCase()))
+                return p;
+        }
+        return null;
+    }
+
+
 
     // TODO - see functional spec for details of code to add
 
