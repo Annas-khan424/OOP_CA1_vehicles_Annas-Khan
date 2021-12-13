@@ -93,4 +93,7 @@ public class Passenger {
                 + email + ", phone=" + phone + ", location="
                 + location + "}";
     }
+    public String inTXT(){
+        return id + "," + name + "," + email + "," + phone + "," + location.getLatitude() + "," + location.getLongitude();
+    }
 }

@@ -6,3 +6,4 @@ public enum FilterVehicles {
     MAKE,
     MODEL
 }
+
