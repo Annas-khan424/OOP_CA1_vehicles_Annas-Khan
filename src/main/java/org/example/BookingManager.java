@@ -44,6 +44,73 @@ public class BookingManager {
         System.out.println("-----------------------------------------------------");
 
     }
+
+    public void addNewBooking() {
+
+        Scanner kb = new Scanner(System.in);
+        System.out.println("These are Vehicles Ids available in the list");
+        vehicleManager.displayAllVehicleId();
+        System.out.println("These are Passengers Ids available in the list");
+        passengerStore.displayAllPassengerId();
+        try {
+
+            System.out.println("Enter Vehicle ID from above list");
+            int vehicleId = kb.nextInt();
+
+            System.out.println("Enter Passenger ID from above list");
+            int passengerId = kb.nextInt();
+
+            System.out.println("Enter Booking Year");
+            int year = kb.nextInt();
+
+            System.out.println("Enter Booking Month");
+            int month = kb.nextInt();
+
+            System.out.println("Enter Booking Day");
+            int day = kb.nextInt();
+
+            System.out.println("Enter Booking Hour");
+            int hour = kb.nextInt();
+
+            System.out.println("Enter Booking Minute");
+            int minute = kb.nextInt();
+
+            System.out.println("Enter Start Latitude");
+            double latStart = kb.nextDouble();
+
+            System.out.println("Enter Start Longitude");
+            double longStart = kb.nextDouble();
+
+            System.out.println("Enter End Latitude");
+            double latEnd = kb.nextDouble();
+
+            System.out.println("Enter End Longitude");
+            double longEnd = kb.nextDouble();
+
+            System.out.println("Enter Cost");
+            double cost = kb.nextDouble();
+
+            if (passengerStore.findPassengerById(passengerId) == null) {
+                System.out.println("Passenger " + passengerId + " was not found");
+            }
+
+            else if (vehicleManager.findVehicleById(vehicleId) == null) {
+                System.out.println("Vehicle " + vehicleId + " was not found");
+            }
+
+            else {
+                boolean found = addBooking(passengerId, vehicleId, year, month, day, hour, minute, latStart, longStart, latEnd, longEnd, cost);
+                if (!found) {
+                    System.out.println("Booking was added");
+                } else {
+                    System.out.println("Booking already exists");
+                }
+            }
+
+        } catch (InputMismatchException | NumberFormatException e) {
+            System.out.print("Invalid option - please enter valid details");
+        }
+    }
     public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
                               double startLatitude, double startLongitude,
                               double endLatitude, double endLongitude, double cost) {
@@ -65,6 +132,27 @@ public class BookingManager {
         }
         return false;
     }
+//    public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
+//                              double startLatitude, double startLongitude,
+//                              double endLatitude, double endLongitude, double cost) {
+//
+//
+//        if (passengerStore.findPassengerById(passengerId) != null &&
+//                vehicleManager.findVehicleById(vehicleId) != null) {
+//
+//            bookingList.add(new Booking(passengerId, vehicleId, year, month, day, hour, minute,
+//                    startLatitude, startLongitude,
+//                    endLatitude, endLongitude, cost));
+//
+//            System.out.println(email.sendReminderBookingMessage(passengerId, vehicleId, year, month, day, hour, minute,
+//                    startLatitude, startLongitude,
+//                    endLatitude, endLongitude, cost));
+//
+//        } else {
+//            System.out.println("Cannot find passenger or vehicle on record!");
+//        }
+//        return false;
+//    }
     public void displayAllForm() {
         ArrayList<Booking> booking = bookingList;
         for (Booking b : booking) {

@@ -36,6 +36,7 @@ public class App {
     private IdGenerator idGenerator;
     private static final Scanner KB = new Scanner(System.in);
 
+
     public static void main(String[] args) {
         App app = new App();
         app.start();
@@ -51,7 +52,7 @@ public class App {
 
         passengerStore = new PassengerStore("passengers.txt");
         vehicleManager = new VehicleManager("vehicles.txt");
-        bookingManager = new BookingManager("Bookings.txt", passengerStore, vehicleManager);
+        bookingManager = new BookingManager("Booking.txt", passengerStore, vehicleManager);
 
 
 
@@ -623,7 +624,7 @@ public class App {
                             bookingViews();
                             break;
                         case MAKE_BOOKING:
-                            addNewBooking();
+                            bookingManager.addNewBooking();
 
                             break;
                         case DELETE_BOOKING:
@@ -661,72 +662,6 @@ public class App {
                 }
             } while (option != EXIT);
 
-        }
-    }
-    public void addNewBooking() {
-
-        Scanner kb = new Scanner(System.in);
-        System.out.println("These are Vehicles Ids available in the list");
-        vehicleManager.displayAllVehicleId();
-        System.out.println("These are Passengers Ids available in the list");
-        passengerStore.displayAllPassengerId();
-        try {
-
-            System.out.println("Enter Vehicle ID from above list");
-            int vehicleId = kb.nextInt();
-
-            System.out.println("Enter Passenger ID from above list");
-            int passengerId = kb.nextInt();
-
-            System.out.println("Enter Booking Year");
-            int year = kb.nextInt();
-
-            System.out.println("Enter Booking Month");
-            int month = kb.nextInt();
-
-            System.out.println("Enter Booking Day");
-            int day = kb.nextInt();
-
-            System.out.println("Enter Booking Hour");
-            int hour = kb.nextInt();
-
-            System.out.println("Enter Booking Minute");
-            int minute = kb.nextInt();
-
-            System.out.println("Enter Start Latitude");
-            double latStart = kb.nextDouble();
-
-            System.out.println("Enter Start Longitude");
-            double longStart = kb.nextDouble();
-
-            System.out.println("Enter End Latitude");
-            double latEnd = kb.nextDouble();
-
-            System.out.println("Enter End Longitude");
-            double longEnd = kb.nextDouble();
-
-            System.out.println("Enter Cost");
-            double cost = kb.nextDouble();
-
-            if (passengerStore.findPassengerById(passengerId) == null) {
-                System.out.println("Passenger " + passengerId + " was not found");
-            }
-
-            else if (vehicleManager.findVehicleById(vehicleId) == null) {
-                System.out.println("Vehicle " + vehicleId + " was not found");
-            }
-
-            else {
-//                boolean found = addBooking(passengerId, vehicleId, year, month, day, hour, minute, latStart, longStart, latEnd, longEnd, cost);
-//                if (!found) {
-//                    System.out.println("Booking was added");
-//                } else {
-//                    System.out.println("Booking already exists");
-//                }
-            }
-
-        } catch (InputMismatchException | NumberFormatException e) {
-            System.out.print("Invalid option - please enter valid details");
         }
     }
 
