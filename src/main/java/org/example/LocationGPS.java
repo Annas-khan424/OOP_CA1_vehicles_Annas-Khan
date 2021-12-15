@@ -3,7 +3,9 @@ package org.example;
 // Class that wraps the latitude and longitude of a location
 // into one object for convenience.
 
-public class LocationGPS
+import java.io.Serializable;
+
+public class LocationGPS implements Serializable
 {
     private double latitude;
     private double longitude;

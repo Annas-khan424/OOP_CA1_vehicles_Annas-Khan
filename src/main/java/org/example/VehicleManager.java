@@ -1,10 +1,9 @@
 package org.example;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class VehicleManager {
@@ -69,10 +68,44 @@ public class VehicleManager {
         }
     }
 
+    public List<Vehicle> getAllVehicle() {
+        return this.vehicleList;
+    }
+
     public void displayAllVehicles() {
         for (Vehicle v : vehicleList)
             System.out.println(v.toString());
     }
+    public void displayAllVehicleId() {
+        for (Vehicle v : vehicleList)
+            System.out.println(v.getId());
+    }
+
+    public ArrayList findVehicleByType(String type){
+        ArrayList<Van>  vanList = new ArrayList<>();
+        ArrayList<Car> carList = new ArrayList<>();
+
+
+        for (Vehicle v: vehicleList){
+            if (v.getType().equalsIgnoreCase(type)){
+                if (type.equalsIgnoreCase("car")||type.equalsIgnoreCase("4x4")){
+                    carList.add((Car) v);
+                }
+                else {
+                    vanList.add((Van) v);
+                }
+            }
+        }
+        if (type.equalsIgnoreCase("car")||type.equalsIgnoreCase("4x4")){
+            carList.sort(new VehicleComparator());
+            return carList;
+        }else{
+            vanList.sort(new VehicleComparator());
+            return vanList;
+        }
+
+    }
+
 
     public Vehicle findByRegistration(String registration) {
         if (registration == null) return null;
@@ -82,77 +115,68 @@ public class VehicleManager {
                 v = i;
         return v;
     }
+    public Vehicle findVehicleById(int id){
+        for (Vehicle v: vehicleList){
+            if (v.getId()== id){
+                return v;
+            }
+        }
+        return null;}
+
 
     public ArrayList<Vehicle> searchVehicleList(VehicleSearch searchType, String searchBy) {
-        ArrayList<Vehicle> res = new ArrayList<>();
+        ArrayList<Vehicle> searchVeh = new ArrayList<>();
         VehicleComparator comparator = new VehicleComparator();
 
         switch (searchType) {
             case TYPE:
                 for (Vehicle v : this.vehicleList)
                     if (v.getType().toLowerCase().equals(searchBy.toLowerCase()))
-                        res.add(v);
+                        searchVeh.add(v);
                 break;
             case MAKE:
                 for (Vehicle v : this.vehicleList)
                     if (v.getMake().toLowerCase().equals(searchBy.toLowerCase()))
-                        res.add(v);
+                        searchVeh.add(v);
                 break;
             case MODEL:
                 for (Vehicle v : this.vehicleList)
                     if (v.getModel().toLowerCase().equals(searchBy.toLowerCase()))
-                        res.add(v);
+                        searchVeh.add(v);
                 break;
             case SEATS:
                 for (Vehicle v : this.vehicleList)
                     if (v instanceof Car && ((Car) v).getSeats() == Integer.parseInt(searchBy))
-                        res.add(v);
+                        searchVeh.add(v);
                 break;
             default:
-                res = null;
+                searchVeh = null;
                 break;
         }
-        Collections.sort(res, comparator);
-        return res;
+        Collections.sort(searchVeh, comparator);
+        return searchVeh;
     }
+
+
+
+
     public void save() {
-        File file = new File(this.FILE_NAME);
-        FileWriter fWriter = null;
         try {
-            fWriter = new FileWriter(file);
+            FileOutputStream f = new FileOutputStream("vehicles.txt");
+            ObjectOutputStream o = new ObjectOutputStream(f);
 
-            for (Vehicle v : this.vehicleList) {
-                int id = v.getId();
-                String type = v.getType();  // vehicle type
-                String make = v.getMake();
-                String model = v.getModel();
-                double milesPerKwH = v.getMilesPerKm();
-                String registration = v.getRegistration();
-                double costPerMile = v.getCostPerMile();
-                int year = v.getLastServicedDate().getYear();   // last service date
-                int month = v.getLastServicedDate().getMonthValue();
-                int day = v.getLastServicedDate().getDayOfMonth();
-                int mileage = v.getMileage();
-                double latitude = v.getDepotGPSLocation().getLatitude();  // Depot GPS location
-                double longitude = v.getDepotGPSLocation().getLongitude();
-
-                String info = id+","+type+","+make+","+model+","+milesPerKwH+","+registration+","+costPerMile+","+year+","+month+","+day+","+mileage+","+latitude+","+longitude+",";
-                if (v instanceof Van)
-                    info += ((Van) v).getLoadSpace();
-                else
-                    info += ((Car) v).getSeats();
-                fWriter.write(info+"\n");
+            for (Vehicle v: vehicleList){
+                o.writeObject(v);
             }
-        } catch (IOException e) {
+            o.close();
+            f.close();
+
+        }catch (FileNotFoundException e){
+            System.out.println("File Not Found");
+        }catch (IOException e){
             e.printStackTrace();
-        }finally{
-            //close resources
-            try {
-                fWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+
     }
 }
 

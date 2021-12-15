@@ -22,13 +22,10 @@ package org.example;    // DO NOT CHANGE THIS FILE      November2021
 // The write-to-file each time approach may be inefficient,
 // but it is easy to understand.
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
-public class IdGenerator {
+public class IdGenerator implements Serializable {
 
     private static IdGenerator idGenerator; // reference to instance of this class
     private int nextId;

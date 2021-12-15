@@ -1,15 +1,14 @@
 package org.example;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.io.FileWriter;
 
 public class PassengerStore {
 
     private final ArrayList<Passenger> passengerList;
+    private final String filename = "passengers.txt";
 
     public PassengerStore(String fileName) {
         this.passengerList = new ArrayList<>();
@@ -46,15 +45,15 @@ public class PassengerStore {
             System.out.println("Exception thrown. " + e);
         }
     }
-    public List<Passenger> getAllPassengers() {
-        return this.passengerList;
-    }
-
-    public void displayAllPassengers() {
-        for (Passenger p : this.passengerList) {
-            System.out.println(p.toString());
-        }
-    }
+//    public List<Passenger> getAllPassengers() {
+//        return this.passengerList;
+//    }
+//
+//    public void displayAllPassengers() {
+//        for (Passenger p : this.passengerList) {
+//            System.out.println(p.toString());
+//        }
+//    }
     public void displayAllForm() {
         ArrayList<Passenger> passengers = passengerList;
         passengers.sort(new PassengerNameComparator());
@@ -71,6 +70,11 @@ public class PassengerStore {
         System.out.println("Location: " + p.getLocation());
         System.out.println("---------------------------------");
 
+    }
+    public void displayAllPassengerId() {
+        for (Passenger p : passengerList) {
+            System.out.println(p.getId());
+        }
     }
 
     public String addPassenger(String name, String email, String phone, double latitude, double longitude) {
@@ -97,19 +101,78 @@ public class PassengerStore {
         }
         return null;
     }
-    public void passengerDelete(String name, String email)
-    {
+    public Passenger findPassengerById(int id) {
+        for (Passenger p : passengerList) {
+            if (p.getId() == id) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public void removePassenger(Passenger p) {
         try{
             FileWriter writer = new FileWriter("passengers.txt",true);
-            for(Passenger p : passengerList){
-                if (p.getName().equalsIgnoreCase(name) && p.getEmail().equalsIgnoreCase(email)){
-                    passengerList.remove(p);
-                    break;
-                }
-            }
-        } catch (IOException e){
-            System.out.println("Exception Thrown. "+ e);
+        System.out.println("Passenger " + p.getId() + " removed");
+        passengerList.remove(p);
+            writer.write("\n" + p.inTXT());
+            writer.close();
+            }catch (IOException e){
+          System.out.println("Exception Thrown. "+ e);
         }
+    }
+
+    //
+
+    public boolean checkPassengerID(int pID) {
+
+        for (Passenger p : passengerList) {
+
+            if (p.getId() == pID) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean checkPassengerName(String name, int pID) {
+            for (Passenger p : passengerList) {
+            if (p.getName().toLowerCase().contains(name.toLowerCase()) && p.getId() != pID) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public boolean checkPassengerEmail(String email, int pID) {
+        for (Passenger p : passengerList) {
+            if (p.getEmail().equalsIgnoreCase(email) && p.getId() != pID) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkPassengerPhone(String phone, int pID) {
+        for (Passenger p : passengerList) {
+
+            if (p.getPhone().equalsIgnoreCase(phone) && p.getId() != pID) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    public boolean checkPassengerLocation(double latitude, double longitude, int pID) {
+
+        for (Passenger p : passengerList) {
+
+            if (p.getLocation().getLatitude() == latitude && p.getLocation().getLongitude() == longitude && p.getId() != pID) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -123,9 +186,25 @@ public class PassengerStore {
         return null;
     }
 
+        public void save() {
+            try {
+                FileOutputStream f = new FileOutputStream(filename);
+                ObjectOutputStream o = new ObjectOutputStream(f);
+
+                for (Passenger p : passengerList) {
+                    o.writeObject(p);
+                }
+                o.close();
+                f.close();
+
+            } catch (FileNotFoundException e) {
+                System.out.println("File Not Found");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
 
 
 
-    // TODO - see functional spec for details of code to add
-
- } // end class
+}// end class
