@@ -2,8 +2,9 @@ package org.example;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileWriter;
 
 public class PassengerStore {
 
@@ -45,23 +46,15 @@ public class PassengerStore {
             System.out.println("Exception thrown. " + e);
         }
     }
-//    public List<Passenger> getAllPassengers() {
-//        return this.passengerList;
-//    }
 //
-//    public void displayAllPassengers() {
-//        for (Passenger p : this.passengerList) {
-//            System.out.println(p.toString());
-//        }
-//    }
     public void displayAllForm() {
         ArrayList<Passenger> passengers = passengerList;
         passengers.sort(new PassengerNameComparator());
         for (Passenger p : passengers) {
-            displayForm(p);
+            displayInForm(p);
         }
     }
-    public void displayForm(Passenger p) {
+    public void displayInForm(Passenger p) {
         System.out.println("---------------------------------");
         System.out.println("Passenger ID: " + p.getId());
         System.out.println("Passenger Name: " + p.getName());
@@ -186,24 +179,7 @@ public class PassengerStore {
         return null;
     }
 
-        public void save() {
-            try {
-                FileOutputStream f = new FileOutputStream(filename);
-                ObjectOutputStream o = new ObjectOutputStream(f);
 
-                for (Passenger p : passengerList) {
-                    o.writeObject(p);
-                }
-                o.close();
-                f.close();
-
-            } catch (FileNotFoundException e) {
-                System.out.println("File Not Found");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
 
 
 

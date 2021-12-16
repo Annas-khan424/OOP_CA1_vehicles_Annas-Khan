@@ -710,7 +710,7 @@ public class App {
                         if (booking == null) {
                             System.out.println("Booking not found");
                         } else {
-                            bookingManager.displayForm(booking);
+                            bookingManager.displayInForm(booking);
 
                         }
 
@@ -726,7 +726,7 @@ public class App {
                         if (!bookingList.isEmpty()) {
 
                             for (Booking b : bookingList) {
-                                bookingManager.displayForm(b);
+                                bookingManager.displayInForm(b);
                             }
 
                         } else {
@@ -1263,7 +1263,6 @@ public class App {
 
     private void close() {
         vehicleManager.save();
-        passengerStore.save();
         bookingManager.save();
 
         System.out.println("Program exiting... Goodbye");

@@ -6,3 +6,5 @@
 
 
 123,annas Khan,AnnasKhan@gmail.com,0830218044,45.0,67.9
+
+125,sakhi jan,Sakhi@gmail.com,0899888258,87.8797,-34.49

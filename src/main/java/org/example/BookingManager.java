@@ -7,8 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
+import java.io.FileWriter;
 
 //
 public class BookingManager {
@@ -31,7 +32,7 @@ public class BookingManager {
 
 
 
-    public void displayForm(Booking b) {
+    public void displayInForm(Booking b) {
 
         System.out.println("-----------------------------------------------------");
         System.out.println("Booking ID: " + b.getBookingId());
@@ -44,6 +45,13 @@ public class BookingManager {
         System.out.println("-----------------------------------------------------");
 
     }
+    public void displayAllForm() {
+        ArrayList<Booking> booking = bookingList;
+        for (Booking b : booking) {
+            displayInForm(b);
+        }
+    }
+
 
     public void addNewBooking() {
 
@@ -53,6 +61,7 @@ public class BookingManager {
         System.out.println("These are Passengers Ids available in the list");
         passengerStore.displayAllPassengerId();
         try {
+            FileWriter writer = new FileWriter("Booking.txt", true);
 
             System.out.println("Enter Vehicle ID from above list");
             int vehicleId = kb.nextInt();
@@ -99,17 +108,21 @@ public class BookingManager {
             }
 
             else {
+
                 boolean found = addBooking(passengerId, vehicleId, year, month, day, hour, minute, latStart, longStart, latEnd, longEnd, cost);
                 if (!found) {
                     System.out.println("Booking was added");
                 } else {
                     System.out.println("Booking already exists");
                 }
+
             }
 
-        } catch (InputMismatchException | NumberFormatException e) {
-            System.out.print("Invalid option - please enter valid details");
+        }catch (IOException e) {
+            System.out.println("Exception Thrown. " + e);
         }
+
+
     }
     public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
                               double startLatitude, double startLongitude,
@@ -123,6 +136,7 @@ public class BookingManager {
                     startLatitude, startLongitude,
                     endLatitude, endLongitude, cost));
 
+
             System.out.println(email.sendReminderBookingMessage(passengerId, vehicleId, year, month, day, hour, minute,
                     startLatitude, startLongitude,
                     endLatitude, endLongitude, cost));
@@ -132,33 +146,7 @@ public class BookingManager {
         }
         return false;
     }
-//    public boolean addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int minute,
-//                              double startLatitude, double startLongitude,
-//                              double endLatitude, double endLongitude, double cost) {
-//
-//
-//        if (passengerStore.findPassengerById(passengerId) != null &&
-//                vehicleManager.findVehicleById(vehicleId) != null) {
-//
-//            bookingList.add(new Booking(passengerId, vehicleId, year, month, day, hour, minute,
-//                    startLatitude, startLongitude,
-//                    endLatitude, endLongitude, cost));
-//
-//            System.out.println(email.sendReminderBookingMessage(passengerId, vehicleId, year, month, day, hour, minute,
-//                    startLatitude, startLongitude,
-//                    endLatitude, endLongitude, cost));
-//
-//        } else {
-//            System.out.println("Cannot find passenger or vehicle on record!");
-//        }
-//        return false;
-//    }
-    public void displayAllForm() {
-        ArrayList<Booking> booking = bookingList;
-        for (Booking b : booking) {
-            displayForm(b);
-        }
-    }
+
 
 
     public void removeBooking(Booking b) {
@@ -205,7 +193,7 @@ public class BookingManager {
         ArrayList<Booking> nameList = filterByNameBookings(name);
         nameList.sort(new BookingComparator());
         for (Booking b : nameList) {
-            displayForm(b);
+            displayInForm(b);
         }
 
     }
@@ -232,7 +220,7 @@ public class BookingManager {
         } else {
             futureBookings.sort(new BookingComparator());
             for (Booking b : futureBookings) {
-                displayForm(b);
+                displayInForm(b);
             }
         }
 
@@ -263,6 +251,8 @@ public class BookingManager {
     private void loadBookingDataFromFile(String filename) {
 
         try {
+            FileWriter writer = new FileWriter("Booking.txt", true);
+
             Scanner sc = new Scanner(new File(filename));
 //           Delimiter: set the delimiter to be a comma character ","
 //                    or a carriage-return '\r', or a newline '\n'
@@ -402,36 +392,11 @@ public class BookingManager {
         return true;
     }
 
-//    public void loadBookingdataFromFile(String filename) {
-//
-//        try {
-//            FileInputStream fin = new FileInputStream(filename);
-//
-//
-//            Object o;
-//
-//            while (true) {
-//                try {
-//                    o = ois.readObject();
-//
-//                    if (o instanceof Booking) {
-//                        bookingList.add((Booking) o);
-//                    } else {
-//                        System.err.println("Unexpected object in file");
-//                    }
-//                } catch (IOException ex) {
-//                    break;
-//                }
-//            }
-//
-//        } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
 
     public void save() {
         try {
-            FileOutputStream f = new FileOutputStream("bookings.txt");
+            FileOutputStream f = new FileOutputStream("Booking.txt");
             ObjectOutputStream o = new ObjectOutputStream(f);
 
             for (Booking b : bookingList) {
