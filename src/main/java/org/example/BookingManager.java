@@ -115,7 +115,8 @@ public class BookingManager {
                 } else {
                     System.out.println("Booking already exists");
                 }
-
+//                writer.write("\n" + addNewBooking().inTXT());
+//                writer.close();
             }
 
         }catch (IOException e) {
@@ -307,9 +308,6 @@ public class BookingManager {
         return false;
     }
 
-    public double deg2rad(double angle) {
-        return angle * Math.PI / 100;
-    }
 
     public double Distance(LocationGPS start, LocationGPS end) {
 
@@ -332,25 +330,6 @@ public class BookingManager {
 
     }
 
-    public double calculateCosts(String type, double distance) {
-        double total;
-
-
-        if (type.equalsIgnoreCase("Car")) {
-            total = distance * 2.00;
-            return total;
-        } else if (type.equalsIgnoreCase("4x4")) {
-            total = distance * 4.00;
-            return total;
-        } else if (type.equalsIgnoreCase("van")) {
-            total = distance * 6.00;
-            return total;
-        } else if (type.equalsIgnoreCase("truck")) {
-            total = distance * 10.00;
-            return total;
-        }
-        return -1;
-    }
 
     public double averageJourney() {
 

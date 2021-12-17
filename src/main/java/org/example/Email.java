@@ -13,7 +13,7 @@ public class Email{
                 "To Passenger Id:"+passengerId+"\n"
                 +"Subject:Booked Vehicle Successful!"+"\n" +
                 "You have booked Vehicle Id "+vehicleId+
-                " on:" + year +"/"+ month+"/" +":"+ day+ ":" + hour+":" +minute+":00"+"\n"+
+                " on:" + year +"/"+ month+"/" +"/"+ day+ " Time:" + hour+":" +minute+":00"+"\n"+
                 "Start Location: StartLatitude = "+startLatitude + " StartLongitude = "+startLongitude+"\n"+
                 "End Location: EndLatitude = "+endLatitude + " EndLongitude = "+endLongitude+"\n"+
                 "Cost:"+ cost +"€\n"

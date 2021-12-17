@@ -658,7 +658,6 @@ public class App {
                     }
 
                 } catch (InputMismatchException | NumberFormatException | NullPointerException e) {
-                    //System.out.print("Invalid option - please enter number in range");
                 }
             } while (option != EXIT);
 
@@ -677,14 +676,14 @@ public class App {
                     + "4. Display by Booking ID\n"
                     + "5. Display all future bookings\n"
                     + "6. Display Average journey length\n"
-                    + "Enter Option [1,2,3,4,5]";
+                    + "Enter Option [1-6]";
 
             final int SHOW_ALL = 1;
-            final int SHOW_PID = 2;
-            final int SHOW_PNAME = 3;
-            final int SHOW_BID = 4;
+            final int SHOW_PASSENGER_ID = 2;
+            final int SHOW_PASSENGER_NAME = 3;
+            final int SHOW_BOOKING_ID = 4;
             final int SHOW_FUTURE = 5;
-            final int SHOW_AVG = 6;
+            final int SHOW_AVG_LENGTH = 6;
 
 
             Scanner keyboard = new Scanner(System.in);
@@ -701,7 +700,7 @@ public class App {
                         bookingManager.displayAllForm();
 
                         break;
-                    case SHOW_BID:
+                    case SHOW_BOOKING_ID:
 
                         System.out.print("Enter Booking ID: ");
                         int bookingID = keyboard.nextInt();
@@ -715,7 +714,7 @@ public class App {
                         }
 
                         break;
-                    case SHOW_PID:
+                    case SHOW_PASSENGER_ID:
 
 
                         System.out.print("Enter Passenger ID: ");
@@ -736,7 +735,7 @@ public class App {
 
 
                         break;
-                    case SHOW_PNAME:
+                    case SHOW_PASSENGER_NAME:
                         System.out.print("Enter Passenger name:");
                         String name = keyboard.nextLine();
 
@@ -748,7 +747,7 @@ public class App {
                         bookingManager.displayFutureBookings();
 
                         break;
-                    case SHOW_AVG:
+                    case SHOW_AVG_LENGTH:
                         System.out.println("Average journey = " + bookingManager.averageJourney());
 
                         break;
@@ -807,8 +806,8 @@ public class App {
                     + "7. Exit\n"
                     + "Enter Option [1-7]";
 
-            final int EDIT_PID = 1;
-            final int EDIT_VID = 2;
+            final int EDIT_PASSENGER_ID = 1;
+            final int EDIT_VEHICLE_ID = 2;
             final int EDIT_DATE = 3;
             final int EDIT_START = 4;
             final int EDIT_END = 5;
@@ -824,7 +823,7 @@ public class App {
                 option = Integer.parseInt(usersInput);
 
                 switch (option) {
-                    case EDIT_PID:
+                    case EDIT_PASSENGER_ID:
 
                         int pid;
 
@@ -860,35 +859,12 @@ public class App {
                         }
 
                         break;
-                    case EDIT_VID:
-                        typeSelection();
-
-                        int vID = 0;
-                        while (true) {
-                            System.out.print("Enter Vehicle ID: ");
-                            while (!keyboard.hasNextDouble()) {
-                                String input = keyboard.next();
-                                System.out.print("Wrong input enter int value: ");
-                            }
-                            vID = keyboard.nextInt();
-                            break;
-                        }
-
-                        if (vehicleManager.findVehicleById(vID) != null) {
-                            break;
-                        }
-                        System.out.println("Can't find vehicle with given ID");
-
-
-                        if (bookingManager.checkAvailability(vID, booking.getBookingDateTime())) {
-                            System.out.println("Can't change Vehicle ID as it booked at the time given");
-                        } else if (vehicleManager.findVehicleById(vID) == null) {
-
-                            break;
-                        } else {
-                            System.out.print("Vehicle ID changed");
-                            booking.setVehicleId(vID);
-                        }
+                    case EDIT_VEHICLE_ID:
+                        System.out.println("Edit Vehicle");
+                        System.out.println("Enter new Vehicle ID:");
+                        int newVehicleId = keyboard.nextInt();
+                        booking.setVehicleId(newVehicleId);
+                        System.out.println("Vehicle Updated");
 
                         break;
                     case EDIT_DATE:
@@ -908,47 +884,21 @@ public class App {
 
                     case EDIT_START:
 
-                        int distance = 0;
-                        Vehicle sVehicle = vehicleManager.findVehicleById(booking.getVehicleId());
-
-                        double startLatitude = validateDouble("latitude");
-                        double startLongitude = validateDouble("longitude");
-
-                        LocationGPS startLocation = new LocationGPS(startLatitude, startLongitude);
-
-                        booking.setStartLocation(startLocation);
-
-
-                        distance += bookingManager.Distance(sVehicle.getDepotGPSLocation(), booking.getStartLocation());
-                        distance += bookingManager.Distance(booking.getStartLocation(), booking.getEndLocation());
-                        distance += bookingManager.Distance(booking.getEndLocation(), sVehicle.getDepotGPSLocation());
-
-                        booking.setCost(bookingManager.calculateCosts(sVehicle.getType(), distance));
-
-                        System.out.println("Booking start location updated");
-
+                        System.out.println("Edit starting Longitude");
+                        System.out.println("Enter new starting Longitude:");
+                        double newStartLongitude = keyboard.nextDouble();
+                        booking.setStartLocation(newStartLongitude, booking.getStartLocation().getLatitude());
+                        System.out.println("Longitude Updated");
                         break;
+
 
                     case EDIT_END:
 
-                        int distance1 = 0;
-                        Vehicle eVehicle = vehicleManager.findVehicleById(booking.getVehicleId());
-
-                        double endLatitude = validateDouble("latitude");
-                        double endLongitude = validateDouble("longitude");
-
-                        LocationGPS endLocation = new LocationGPS(endLatitude, endLongitude);
-
-                        booking.setEndLocation(endLocation);
-
-
-                        distance1 += bookingManager.Distance(eVehicle.getDepotGPSLocation(), booking.getStartLocation());
-                        distance1 += bookingManager.Distance(booking.getStartLocation(), booking.getEndLocation());
-                        distance1 += bookingManager.Distance(booking.getEndLocation(), eVehicle.getDepotGPSLocation());
-
-                        booking.setCost(bookingManager.calculateCosts(eVehicle.getType(), distance1));
-
-                        System.out.println("Booking end location updated");
+                        System.out.println("Edit ending Longitude");
+                        System.out.println("Enter new ending Latitude:");
+                        double newEndLongitude = keyboard.nextDouble();
+                        booking.setStartLocation(booking.getEndLocation().getLongitude(), newEndLongitude);
+                        System.out.println("Longitude Updated");
 
                         break;
 
@@ -976,148 +926,9 @@ public class App {
 
     }
 
-//
-//    public void makeBooking() {
-//
-//        try {
-//            Scanner keyboard = new Scanner(System.in);
-//
-//            Passenger passenger = null;
-//
-//            while (true) {
-//                System.out.print("Enter Passenger Name:");
-//                String pName = keyboard.nextLine();
-//                if (passengerStore.findPassengerByName(pName) != null) {
-//                    passenger = passengerStore.findPassengerByName(pName);
-//                    System.out.println("Passenger found");
-//                    break;
-//                }
-//                System.out.println("Cannot find passenger in our system. Try again.");
-//            }
-//
-//
-//            int pID = passenger.getId();
-//
-//            typeSelection();
-//
-//            int number;
-//            int vID;
-//
-//
-//            while (true) {
-//
-//                System.out.print("Input Vehicle ID:");
-//
-//                while (!keyboard.hasNextInt()) {
-//
-//                    String input = keyboard.next();
-//                    System.out.print("not a valid input - please enter int value: ");
-//                }
-//
-//                vID = keyboard.nextInt();
-//
-//
-//                if (vehicleManager.findVehicleById(vID) != null) {
-//
-//                    break;
-//                }
-//
-//                System.out.println("Can't find vehicle with given ID");
-//            }
-//            Vehicle vehicle = vehicleManager.findVehicleById(vID);
-//
-//            LocalDateTime dateTime = validateDate();
-//
-//            if (bookingManager.checkAvailability(vID, dateTime)) {
-//                System.out.println("Sorry the vehicle you have chosen is already book for the date and time specified.");
-//
-//            } else {
-//                LocationGPS startLocation = passenger.getLocation();
-//
-//
-//                double endLatitude = validateDouble("end latitude"), endLongitude = validateDouble("end longitude");
-//
-//                LocationGPS endLocation = new LocationGPS(endLatitude, endLongitude);
-//
-//                double distance = 0;
-//                distance += bookingManager.Distance(vehicle.getDepotGPSLocation(), startLocation);
-//
-//                distance += bookingManager.Distance(startLocation, endLocation);
-//                distance += bookingManager.Distance(endLocation, vehicle.getDepotGPSLocation());
-//
-//                Vehicle v = vehicleManager.findVehicleById(vID);
-//                String type = v.getType();
-//                double cost = bookingManager.calculateCosts(type, distance);
-//
-//
-//                bookingManager.addNewBooking();
-//                keyboard.nextLine();
-//
-//
-//                String to = passengerStore.findPassengerById(pID).getName();
-//                emailmanager.addEmail(to, dateTime);
-//            }
-//
-//
-//        } catch (InputMismatchException | NumberFormatException err) {
-//
-//            System.out.println("Wrong input please try again   " + err);
-//
-//        }
-//    }
-
-    public void typeSelection() {
 
 
-        System.out.println("\nFind Vehicle by Type");
 
-        System.out.println("1. Van");
-        System.out.println("2. Truck");
-        System.out.println("3. Car");
-        System.out.println("4. 4X4");
-        System.out.print("\nEnter Type: ");
-
-        Scanner keyboard = new Scanner(System.in);
-        String usersInput = keyboard.nextLine();
-        int option = Integer.parseInt(usersInput);
-        final int VAN = 1;
-        final int TRUCK = 2;
-        final int CAR = 3;
-        final int FOURX = 4;
-
-        switch (option) {
-            case VAN:
-                ArrayList<Van> typeListVan = vehicleManager.findVehicleByType("Van");
-                for (Vehicle b : typeListVan) {
-                    System.out.println(b.toString());
-                }
-                break;
-            case TRUCK:
-                ArrayList<Van> typeListTruck = vehicleManager.findVehicleByType("Truck");
-                for (Vehicle b : typeListTruck) {
-                    System.out.println(b.toString());
-                }
-                break;
-            case CAR:
-                ArrayList<Car> typeListCar = vehicleManager.findVehicleByType("Car");
-                for (Car v : typeListCar) {
-                    System.out.println(v.toString());
-                }
-                break;
-            case FOURX:
-                ArrayList<Car> typeListFour = vehicleManager.findVehicleByType("4X4");
-                for (Car v : typeListFour) {
-                    System.out.println(v.toString());
-                }
-                break;
-
-            default:
-                System.out.print("Invalid option - please enter number in range");
-                break;
-        }
-
-
-    }
     public double validateDouble(String coord) {
 
         while (true) {
